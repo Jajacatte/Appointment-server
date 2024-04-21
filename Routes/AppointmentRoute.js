@@ -6,6 +6,9 @@ import { google } from "googleapis";
 import cron from "node-cron";
 import { protectDoctor, protectPatient } from "../Middleware/AuthMiddleware.js";
 import moment from "moment";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const appointmentRouter = express.Router();
 
@@ -77,7 +80,8 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
-got
+console.log("REFRESH TOKEN", REFRESH_TOKEN);
+
 // Initialize OAuth2 client
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -275,7 +279,7 @@ appointmentRouter.get(
   "/appointments/scheduled",
   protectDoctor,
   asyncHandler(async (req, res) => {
-    const doctorId  = req.doctor._id;
+    const doctorId = req.doctor._id;
 
     // Fetch appointments with status 'scheduled' for the specified doctor
     const appointments = await Appointments.find({
