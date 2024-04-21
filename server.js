@@ -15,7 +15,7 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: ["http://localhost:3000"],
+  origin: ["http://localhost:3000", "https://appointment-server-15eu.onrender.com"],
   // Add other CORS options as needed
 };
 
