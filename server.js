@@ -14,12 +14,9 @@ dotenv.config();
 
 const app = express();
 
-const corsOptions = {
-  origin: ["http://localhost:3000", "https://appointment-server-15eu.onrender.com"],
-  // Add other CORS options as needed
-};
 
-app.use(cors(corsOptions));
+
+app.use(cors());
 app.use(morgan());
 app.use("/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
