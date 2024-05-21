@@ -14,8 +14,6 @@ dotenv.config();
 
 const app = express();
 
-
-
 app.use(cors());
 app.use(morgan());
 app.use("/webhook", express.raw({ type: "application/json" }));

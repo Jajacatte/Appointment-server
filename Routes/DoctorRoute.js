@@ -2,7 +2,7 @@ import express from "express";
 import { upload } from "../Cloudinary.js";
 import asyncHandler from "express-async-handler";
 import Doctors from "../Models/DoctorSchema.js";
-import { protectDoctor } from "../Middleware/AuthMiddleware.js";
+import { protectt } from "../Middleware/AuthMiddleware.js";
 import generateToken from "../Utils/GenerateToken.js";
 
 const doctorRouter = express.Router();
@@ -80,7 +80,7 @@ doctorRouter.get(
 );
 doctorRouter.get(
   "/doctors/profile",
-  protectDoctor,
+  protectt,
   asyncHandler(async (req, res) => {
     try {
       const doctorId = req.doctor._id;
@@ -112,9 +112,9 @@ doctorRouter.get(
 );
 
 doctorRouter.post(
-  "/update", protectDoctor,
+  "/update", protectt,
   upload.array("files", 5),
-  protectDoctor,
+  protectt,
   async (req, res) => {
     const doctorId = req?.doctor._id;
     const { doctorData, clinicImages, imageURL } = req.body; // Destructure doctorData, clinicImages, and imageURL

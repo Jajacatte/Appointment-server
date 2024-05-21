@@ -4,13 +4,13 @@ import Patients from "../Models/PatientSchema.js";
 import Doctors from "../Models/DoctorSchema.js";
 import { upload } from "../Cloudinary.js";
 import generateToken from "./../Utils/GenerateToken.js";
-import { protectPatient } from "../Middleware/AuthMiddleware.js";
+import { protect } from "../Middleware/AuthMiddleware.js";
 
 const patientRouter = express.Router();
 
 patientRouter.post(
   "/bookmark/:id",
-  protectPatient,
+  protect,
   asyncHandler(async (req, res) => {
     const { id } = req.params;
     console.log(id);
@@ -99,7 +99,7 @@ patientRouter.post(
 // Route to fetch patient by ID
 patientRouter.get(
   "/profile",
-  protectPatient,
+  protect,
   asyncHandler(async (req, res) => {
     const patientId = req.patient?._id;
     console.log("PPPPPPPPP", req.patient?._id);
@@ -115,11 +115,9 @@ patientRouter.get(
   })
 );
 
-
-
 patientRouter.put(
   "/update",
-  protectPatient,
+  protect,
   upload.array("files", 5),
   asyncHandler(async (req, res) => {
     const patientId = req.patient?._id;
@@ -160,7 +158,8 @@ patientRouter.put(
 );
 
 patientRouter.post(
-  "/add-health-data", protectPatient,
+  "/add-health-data",
+  protect,
   asyncHandler(async (req, res) => {
     const { newData } = req.body;
 
@@ -183,7 +182,5 @@ patientRouter.post(
     });
   })
 );
-
-
 
 export default patientRouter;

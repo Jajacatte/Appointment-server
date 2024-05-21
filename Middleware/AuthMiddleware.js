@@ -5,7 +5,7 @@ import Patients from "../Models/PatientSchema.js";
 import Doctors from "./../Models/DoctorSchema.js";
 
 // Middleware for protecting routes accessible only to parents
-export const protectPatient = asyncHandler(async (req, res, next) => {
+export const protect = asyncHandler(async (req, res, next) => {
   let token;
   try {
     if (
@@ -29,7 +29,7 @@ export const protectPatient = asyncHandler(async (req, res, next) => {
 });
 
 // Middleware for protecting routes accessible only to children
-export const protectDoctor = asyncHandler(async (req, res, next) => {
+export const protectt = asyncHandler(async (req, res, next) => {
   let token;
   try {
     if (

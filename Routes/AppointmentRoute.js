@@ -4,9 +4,10 @@ import Appointments from "../Models/AppointmentSchema.js";
 import nodemailer from "nodemailer";
 import { google } from "googleapis";
 import cron from "node-cron";
-import { protectDoctor, protectPatient } from "../Middleware/AuthMiddleware.js";
+import { protect, protectt } from "../Middleware/AuthMiddleware.js";
 import moment from "moment";
 import dotenv from "dotenv";
+import { OAuth2Client } from "google-auth-library";
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ const appointmentRouter = express.Router();
 
 appointmentRouter.get(
   "/booked-appointments/:id",
-  protectPatient,
+  protect,
   asyncHandler(async (req, res) => {
     const doctorId = req.params.id;
     const { date } = req.query;
@@ -40,7 +41,7 @@ appointmentRouter.get(
 // Route to fetch appointments for a patient
 appointmentRouter.get(
   "/appointments/patient",
-  protectPatient, // Ensure protectPatient middleware executes first
+  protect, // Ensure protectPatient middleware executes first
   asyncHandler(async (req, res) => {
     const patientId = req?.patient?._id;
     console.log("THIS IS THE PATIENT ID FOR APP", patientId); // Log patientId here
@@ -59,7 +60,7 @@ appointmentRouter.get(
 );
 appointmentRouter.get(
   "/appointments/doctor",
-  protectDoctor,
+  protectt,
   asyncHandler(async (req, res) => {
     const doctorId = req.doctor._id;
 
@@ -80,9 +81,9 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+
 console.log("REFRESH TOKEN", REFRESH_TOKEN);
 
-// Initialize OAuth2 client
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
   CLIENT_SECRET,
@@ -130,8 +131,9 @@ const setOAuthCredentials = async () => {
     throw new Error("Failed to set OAuth credentials.");
   }
 };
+
 // Function to send email
-const sendEmail = async (product, subject, text) => {
+const sendEmail = async (toEmail, subject, text) => {
   try {
     await setOAuthCredentials(); // Ensure OAuth credentials are set before sending emails
 
@@ -153,7 +155,7 @@ const sendEmail = async (product, subject, text) => {
 
     const mailOptions = {
       from: "davidodimayo7@gmail.com",
-      to: "idowuodimayo@gmail.com",
+      to: "jajacatte@gmail.com",
       subject: subject,
       text: text,
     };
@@ -169,7 +171,7 @@ const sendEmail = async (product, subject, text) => {
 // Route to book appointment
 appointmentRouter.post(
   "/book-appointment",
-  protectPatient,
+  protect,
   asyncHandler(async (req, res) => {
     const { doctorId, date, time, status } = req.body;
     const patientId = req?.patient._id;
@@ -219,7 +221,7 @@ appointmentRouter.post(
 // Route to accept appointment
 appointmentRouter.put(
   "/appointments/accept/:appointmentId",
-  protectDoctor,
+  protectt,
   asyncHandler(async (req, res) => {
     const { appointmentId } = req.params;
 
@@ -251,7 +253,7 @@ appointmentRouter.put(
 // Route to cancel appointment
 appointmentRouter.put(
   "/appointments/cancel/:appointmentId",
-  protectDoctor,
+  protectt,
   asyncHandler(async (req, res) => {
     const { appointmentId } = req.params;
 
@@ -277,7 +279,7 @@ appointmentRouter.put(
 );
 appointmentRouter.get(
   "/appointments/scheduled",
-  protectDoctor,
+  protectt,
   asyncHandler(async (req, res) => {
     const doctorId = req.doctor._id;
 
